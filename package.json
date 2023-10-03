@@ -1,0 +1,32 @@
+{
+  "name": "intent-guides",
+  "version": "1.0.0",
+  "description": "A series of guides for developers on creating intents with Brink.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-0": "node ./content/0_creating-first-intent/script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brinktrade/intent-guides.git"
+  },
+  "keywords": [
+    "intents",
+    "guides",
+    "scripts",
+    "tutorials"
+  ],
+  "author": "Jacob D. Castro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brinktrade/intent-guides/issues"
+  },
+  "homepage": "https://github.com/brinktrade/intent-guides#readme",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "dotenv": "^16.3.1",
+    "prettier": "^3.0.3",
+    "viem": "^1.13.2"
+  }
+}
