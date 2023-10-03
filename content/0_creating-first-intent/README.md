@@ -31,7 +31,7 @@ const main = async () => {
 main()
 ```
 
-**Note**: This guide makes use of the Brink API which requires an API key. Please [contact us](mailto:_____________) to get yours!
+**Note**: This guide makes use of the Brink API which requires an API key. Please [contact us](https://discord.gg/NNx4Y7XB "brink discord") to get yours!
 
 ## 1. Constructing the Intent
 
