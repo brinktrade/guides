@@ -10,6 +10,10 @@ This guide uses [viem](https://www.npmjs.com/package/viem "viem package on npm")
 
 We've also opted to use [dotenv](https://www.npmjs.com/package/dotenv "dotenv package on npm") to hide our secrets, as we will be using both an EOA private key and a Brink API key.
 
+> 🚧 Private Key Security
+>
+> Note: We at Brink DO NOT encourage storing private keys in .env files. This is for demonstration purposes only. Please use a more secure method of storing your private keys in production.
+
 ## Setup
 
 We'll start by installing our packages and setting up the JavaScript code file. In the file, we will create one `main()` function that runs our script end-to-end. We'll also load our secrets from our .env file.
@@ -249,7 +253,9 @@ BRINK_API_KEY=<my_api_key>
 SIGNER_PRIVATE_KEY=<my_private_key>
 ```
 
-Note: We at Brink DO NOT encourage storing private keys in .env files. This is for demonstration purposes only. Please use a more secure method of storing your private keys in production.
+> 🚧 Private Key Security
+>
+> Note: We at Brink DO NOT encourage storing private keys in .env files. This is for demonstration purposes only. Please use a more secure method of storing your private keys in production.
 
 ```typescript script.js
 const axios = require('axios')
