@@ -18,8 +18,7 @@ We'll start by installing our packages and setting up the JavaScript code file. 
 $ npm install viem axios dotenv
 ```
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -43,8 +42,7 @@ The first step in creating this intent is using Brink's domain-specific language
 
 Inside of our `main()` function, we will add our Brink DSL object, declaring our recurring swap intent with it's parameters and conditions.
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -96,8 +94,7 @@ We'll start by putting our Brink API key into our .env file for security, then l
 BRINK_API_KEY=<my_api_key>
 ```
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -147,8 +144,7 @@ Params for the `/strategies/data/v1` request include:
 
 Using the `params` object in axios, we can define our parameters for this call as such:
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -255,8 +251,7 @@ SIGNER_PRIVATE_KEY=<my_private_key>
 
 Note: We at Brink DO NOT encourage storing private keys in .env files. This is for demonstration purposes only. Please use a more secure method of storing your private keys in production.
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -295,8 +290,7 @@ Now that we have our intent signature using `viem`, we can finally submit it to 
 
 We also get to include the `signature` field from the previous step.
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
@@ -335,8 +329,7 @@ Once the signed Brink Intent is submitted to the Brink API, it will be added to 
 
 Congratulations! You've successfully created your first Brink Intent. Your final code file should look something like this:
 
-```typescript
-// script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()

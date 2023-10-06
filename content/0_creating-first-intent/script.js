@@ -172,6 +172,23 @@ const step1 = async () => {
     }
   )
 
+  // const submitResponse = await axios.post(
+  //   'https://api.brink.trade/strategies/submit/v1',
+  //   {
+  //     chainId: 1,
+  //     signer: walletClient.account.address,
+  //     signatureType: 'EIP712',
+  //     signature,
+  //     strategy: JSON.stringify(myRecurringIntent)
+  //   },
+  //   {
+  //     headers: {
+  //       'x-api-key': process.env.BRINK_API_KEY,
+  //       accept: 'application/json'
+  //     }
+  //   }
+  // )
+
   console.log(submitResponse.data)
 }
 
