@@ -168,7 +168,7 @@ const main = async () => {
 
   const myRecurringIntent = { /* intent definition */ }
 
-  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
+  const compileRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -277,11 +277,11 @@ const main = async () => {
 
   const myRecurringIntent = { /* intent declaration */ }
 
-  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
+  const compileRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     // ... request config
   })
 
-  const { eip712Data } = prepareRes.data
+  const { eip712Data } = compileRes.data
 
   const walletClient = viem.createWalletClient({
     chain: mainnet,
@@ -376,7 +376,7 @@ const main = async () => {
     }
   }
 
-  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
+  const compileRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -389,7 +389,7 @@ const main = async () => {
     }
   })
 
-  const { eip712Data } = prepareRes.data
+  const { eip712Data } = compileRes.data
 
   const walletClient = viem.createWalletClient({
     chain: mainnet,
