@@ -183,6 +183,8 @@ main()
 > 📘 What is a `Declaration`?
 >
 > A `Declaration` is a new concept introduced in the Brink protocol that allows for multiple `Intents` to be submitted in bulk with only one signature. Each time you sign an off-chain message (e.g. EIP-712 signature) on Brink, a `Declaration` is created, and may contain as many `Intents` as the user or developer would like.
+>
+> A `Segment` (actions, conditions, replay values) is the lowest level of granularity in the Brink protocol. `Segments` make up `Intents`, and `Intents` make up `Declarations`. This empowers developers to create truly composable and complex intents quickly and easily.
 
 We must pass `required_transactions` as an item in the `include` array. By doing so, the Brink API will respond with any transactions that are required to be finalized *before* our intent can be fulfilled by solvers. In our case, a token approval transaction is required.
 
