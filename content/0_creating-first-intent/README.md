@@ -92,9 +92,7 @@ We must also specify the `replay.nonce` value, which requires a quick request to
 
 ### Fetching the Nonce Value
 
-To fetch the correct `nonce` value, we must make a GET request to the `/signers/<SIGNER>/nonces/v1` endpoint (replacing `<SIGNER>` with the public address of the EOA we'll be using to sign and submit this intent).
-
-This endpoint will respond with a few pieces of data, but we only need the `nonce` value. Once we have the response data, we can plug it in to our intent object.
+To fetch the correct `nonce` value, we must make a GET request to the `/signers/<SIGNER>/nonces/v1` endpoint (replacing `<SIGNER>` with the public address of the EOA we'll be using to sign and submit this intent). Once we have the response data, we can plug it in to our intent object.
 
 We'll start by putting our Brink API key into our .env file for security, then loading it into our code as a request header in `axios` with an `x-api-key` field.
 
@@ -120,12 +118,12 @@ const main = async () => {
       tokenInAmount: 5000.0,
       tokenIn: 'USDC',
       tokenOut: 'ETH',
-      fee: 2.5 // incentivize solver with 2.5% of the swap
+      fee: 2.5 
     }],
     conditions: [{
       type: 'blockInterval',
-      interval: 50_000, // ~7 days
-      maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
+      interval: 50_000,
+      maxIntervals: 12
     }],
     replay: {
       nonce: parseInt(nonceRes.data.nonce), // nonce value from API response
@@ -245,7 +243,7 @@ We can get all info about the approval transaction in the `requiredTransactions`
 
 To simplify this guide, an easy way to quickly approve tokens is by using the Etherscan "Write Contract" (sometimes "Write Proxy Contract") section of the token contract page.
 
-From the `owner` account, you should approve the `spender` address to spend the tokens. We *highly* recommend approving for an unlimited amount of tokens (max uint256 value), but the `requiredAllowance` value in the response is the minimum amount of tokens you must approve.
+From the `owner` account, you should approve the `spender` address to spend the tokens (the token contract address found at `token.address`). We *highly* recommend approving for an unlimited amount of tokens (max uint256 value), but the `requiredAllowance` value in the response is the minimum amount of tokens you must approve.
 
 ### Approving Tokens Programmatically
 
@@ -304,7 +302,7 @@ main()
 
 Now that we have our declaration signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/intents/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/intents/compile/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
 
-We also get to include the `signature` field from the previous step.
+We must also include the `signature` from the previous step.
 
 ```typescript script.js
 const axios = require('axios')
@@ -326,7 +324,7 @@ const main = async () => {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
-    params: {
+    data: {
       chainId: 1,
       signer: '0xc0ffee',
       signatureType: 'EIP712',
@@ -408,7 +406,7 @@ const main = async () => {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
-    params: {
+    data: {
       chainId: 1,
       signer: '0xc0ffee',
       signatureType: 'EIP712',
