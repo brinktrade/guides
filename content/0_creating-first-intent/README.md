@@ -71,7 +71,7 @@ const main = async () => {
       maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
     }],
     replay: {
-      nonce: 123, // TODO, must make API request for this value, shown below
+      nonce: '123', // TODO, must make API request for this value, shown below
       runs: 'UNTIL_CANCELLED'
     }
   }
@@ -126,7 +126,7 @@ const main = async () => {
       maxIntervals: 12
     }],
     replay: {
-      nonce: parseInt(nonceRes.data.nonce), // nonce value from API response
+      nonce: parseInt(nonceRes.data.nonces[0]), // nonce value from API response
       runs: 'UNTIL_CANCELLED'
     }
   }
@@ -369,7 +369,7 @@ const main = async () => {
       maxIntervals: 12
     }],
     replay: {
-      nonce: parseInt(nonceRes.data.nonce),
+      nonce: parseInt(nonceRes.data.nonces[0]),
       runs: 'UNTIL_CANCELLED'
     }
   }
