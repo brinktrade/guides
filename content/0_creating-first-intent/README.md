@@ -43,7 +43,7 @@ main()
 
 ## 1. Constructing the Intent
 
-The intent we'll be creating in this guide is a **recurring swap intent**, AKA dollar-cost averaging (DCA). We want to swap 5,000 USDC for ETH approximately once a week for 3 months or until we cancel the intent early. We'll also incentivize the solver with 2.5% of the swap.
+The intent we'll be creating in this guide is a **recurring swap intent**, AKA dollar-cost averaging (DCA). We want to swap 5,000 USDC for ETH (WETH) approximately once a week for 3 months or until we cancel the intent early. We'll also incentivize the solver with 2.5% of the swap.
 
 The first step in creating this intent is using Brink's domain-specific language (DSL). The DSL structure for one intent consists of an object with multiple fields that define the guardrails of the intent, which include the `actions`, `conditions` and `replay` fields.
 
@@ -60,13 +60,15 @@ const main = async () => {
   const myRecurringIntent = {
     actions: [{
       type: 'marketSwap',
+      owner: '0xc0ffee', // EOA public address of signer
       tokenInAmount: 5000.0,
-      tokenIn: 'USDC',
-      tokenOut: 'ETH',
+      tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
       fee: 2.5 // incentivize solver with 2.5% of the swap
     }],
     conditions: [{
-      type: 'blockInterval',
+      id: '1234567890', // unique ID for condition, perferably randomly generated
+      type: 'interval',
       interval: 50_000, // ~50,000 blocks are built every 7 days
       maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
     }],
@@ -82,7 +84,7 @@ main()
 
 The `myRecurringIntent` intent object is made up of 3 fields: `actions`, `conditions`, and `replay`.
 
-The `actions` field is an array of objects that define the outcome(s) of our intent, in our case, a 5000 USDC -> ETH market swap. We also set a 2.5% fee that the solver may take as an incentive to fulfill our intent.
+The `actions` field is an array of objects that define the outcome(s) of our intent, in our case, a 5000 USDC -> WETH market swap. We also set a 2.5% fee that the solver may take as an incentive to fulfill our intent.
 
 Similarly, the `conditions` field is an array of objects that define the conditions that the actions may be executed against. Here, we expect the actions to run at a block interval of 50,000 blocks for 12 intervals to meet our "once a week for 3 months" intent condition.
 
@@ -121,7 +123,7 @@ const main = async () => {
       fee: 2.5 
     }],
     conditions: [{
-      type: 'blockInterval',
+      type: 'interval',
       interval: 50_000,
       maxIntervals: 12
     }],
@@ -175,7 +177,7 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       include: ['required_transactions'],
-      declaration: myRecurringIntent
+      declaration: JSON.stringify(myRecurringIntent)
     }
   })
 }
@@ -282,7 +284,6 @@ const main = async () => {
   const { eip712Data } = compileRes.data
 
   const walletClient = viem.createWalletClient({
-    chain: mainnet,
     account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`),
   })
 
@@ -302,7 +303,12 @@ main()
 
 Now that we have our declaration signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/intents/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/intents/compile/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
 
-We must also include the `signature` from the previous step.
+The POST request body for the `/intents/compile/v1` request includes:
+- `chainId`: The chain ID of the network you are using (we are using Ethereum Mainnet, `1`).
+- `signer`: The address of the account that will be signing the intent.
+- `signatureType`: `EIP712` same as before
+- `declaration`: The **compiled** declaration given to us from the compile request step.
+- `signature`: The EIP-712 signature hash we previously signed.
 
 ```typescript script.js
 const axios = require('axios')
@@ -310,28 +316,33 @@ const viem = require('viem')
 require('dotenv').config()
 
 const main = async () => {
-  // ... nonce request
+  // ... nonce request and intent declaration
 
-  const myRecurringIntent = { /* intent declaration */ }
+  const compileRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
+    // ... request config
+  })
 
-  // ... compile request and walletClient from previous step
+  // ... walletClient from previous step
 
   const declarationSignature = await walletClient.signTypedData({
     // ... signTypedData config
   })
 
-  const submitRes = await axios.post('https://api.brink.trade/intents/submit/v1', {
-    headers: {
-      'x-api-key': process.env.BRINK_API_KEY,
-    },
-    data: {
+  const submitRes = await axios.post(
+    'https://api.brink.trade/intents/submit/v1',
+    {
       chainId: 1,
-      signer: '0xc0ffee',
+      signer: signerPublicAddress,
       signatureType: 'EIP712',
-      declaration: myRecurringIntent,
-      signature: declarationSignature
+      declaration: compileRes.data.declaration, // compiled declaration from compile request
+      signature: declarationSignature // signature hash from signTypedData
+    },
+    {
+      headers: {
+        'x-api-key': process.env.BRINK_API_KEY
+      }
     }
-  })
+  )
 }
 
 main()
@@ -341,7 +352,9 @@ Once the signed Brink Declaration is submitted to the Brink API, it will be adde
 
 ## Conclusion
 
-Congratulations! You've successfully created your first Brink Intent and submitted it as a Declaration. Your final code file should look something like this:
+Congratulations! You've successfully created your first Brink Intent and submitted it as a Declaration. Your final code file should look something like the code block below.
+
+For a full, runable script, please visit [`script.js` file in our public guides GitHub repo](https://github.com/brinktrade/guides/blob/main/content/0_creating-first-intent/script.js "script.js in public repo").
 
 ```typescript script.js
 const axios = require('axios')
@@ -355,21 +368,23 @@ const main = async () => {
     }
   })
 
-  const myRecurringIntent = {
+   const myRecurringIntent = {
     actions: [{
       type: 'marketSwap',
+      owner: '0xc0ffee', // EOA public address of signer
       tokenInAmount: 5000.0,
-      tokenIn: 'USDC',
-      tokenOut: 'ETH',
-      fee: 2.5
+      tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      fee: 2.5 // incentivize solver with 2.5% of the swap
     }],
     conditions: [{
-      type: 'blockInterval',
-      interval: 50_000,
-      maxIntervals: 12
+      id: '1234567890', // unique ID for condition, perferably randomly generated
+      type: 'interval',
+      interval: 50_000, // ~50,000 blocks are built every 7 days
+      maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
     }],
     replay: {
-      nonce: parseInt(nonceRes.data.nonces[0]),
+      nonce: parseInt(nonceRes.data.nonces[0]), // nonce value from API response
       runs: 'UNTIL_CANCELLED'
     }
   }
@@ -383,14 +398,13 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       include: ['required_transactions'],
-      declaration: myRecurringIntent
+      declaration: JSON.stringify(myRecurringIntent)
     }
   })
 
   const { eip712Data } = compileRes.data
 
   const walletClient = viem.createWalletClient({
-    chain: mainnet,
     account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`),
   })
 
@@ -402,18 +416,21 @@ const main = async () => {
     primaryType: 'MetaDelegateCall'
   })
 
-  const submitRes = await axios.post('https://api.brink.trade/intents/submit/v1', {
-    headers: {
-      'x-api-key': process.env.BRINK_API_KEY,
-    },
-    data: {
+  const submitRes = await axios.post(
+    'https://api.brink.trade/intents/submit/v1',
+    {
       chainId: 1,
-      signer: '0xc0ffee',
+      signer: signerPublicAddress,
       signatureType: 'EIP712',
-      declaration: myRecurringIntent,
-      signature: declarationSignature
+      declaration: compileRes.data.declaration, // compiled declaration from compile request
+      signature: declarationSignature // signature hash from signTypedData
+    },
+    {
+      headers: {
+        'x-api-key': process.env.BRINK_API_KEY
+      }
     }
-  })
+  )
 
   console.log(submitRes.data)
 }
