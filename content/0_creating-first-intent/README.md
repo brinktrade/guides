@@ -349,7 +349,7 @@ const viem = require('viem')
 require('dotenv').config()
 
 const main = async () => {
-  const nonceRes = await axios.get('https://api.brink.trade/signers/0xc0ffee/v1', {
+  const nonceRes = await axios.get('https://api.brink.trade/signers/0xc0ffee/nonces/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     }
