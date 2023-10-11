@@ -198,10 +198,10 @@ Once submitted, the `/intents/compile/v1` response data will be structured as su
     types: { ... },
     domain: { ... },
     value: { ... },
-    hash: '0x<INTENT_HASH>'
+    hash: '0x<DECLARATION_HASH>'
   },
   eip1271Data: { message: 'Not implemented' },
-  hash: '0x<INTENT_HASH>',
+  hash: '0x<DECLARATION_HASH>',
   requiredTransactions: [
     {
       owner: '<YOUR_PUBLIC_ADDRESS>',
@@ -220,7 +220,7 @@ This data will be put to use for the next 2 steps: approving your Brink Proxy to
 
 ## 3. Approving Your Brink Proxy
 
-Before signing and submitting our intent, we must *approve* the signer's Brink Proxy contract to transfer the tokens involved in the intent. For more info on how the Proxy contracts work in the Brink protocol, please reach out on [Discord](https://discord.gg/NNx4Y7XB "brink discord").
+Before signing and submitting our declaration, we must *approve* the signer's Brink Proxy contract to transfer the tokens involved in the intent. For more info on how the Proxy contracts work in the Brink protocol, please reach out on [Discord](https://discord.gg/NNx4Y7XB "brink discord").
 
 We can get all info about the approval transaction in the `requiredTransactions` field of the API response above.
 
@@ -252,9 +252,9 @@ From the `owner` account, you should approve the `spender` address to spend the 
 
 If you'd like to run the approval transaction programmatically or within a web app, you may construct the transaction using either the `minTx` or the `maxTx` objects in the `requiredTransactions` response array. The `minTx` and `maxTx` contain the exact executable calldata for the approval transaction for both the minimum allowance amount and the maximum allowance amount respectively.
 
-## 4. Signing the Intent
+## 4. Signing the Declaration
 
-Now that we've approved our Brink Proxy to spend our tokens, we can finally sign the intent. To do so, we must construct the EIP-712 typed data that we received from the `/intents/compile/v1` endpoint. These values can be found in the `eip712Data` field of the response. We also must set the `primaryType` field to `MetaDelegateCall`.
+Now that we've approved our Brink Proxy to spend our tokens, we can finally sign the intent (declaration). To do so, we must construct the EIP-712 typed data that we received from the `/intents/compile/v1` endpoint. These values can be found in the `eip712Data` field of the response. We also must set the `primaryType` field to `MetaDelegateCall`.
 
 We can prepare `viem` to sign by adding our private key to our .env file, then loading it into our code as a `walletClient`. Once our `walletClient` is created, we can construct and sign the EIP-712 signature using the `signTypedData()` method, passing in our values from the `eip712Data` field and our `walletClient.account` object.
 
@@ -276,7 +276,7 @@ require('dotenv').config()
 const main = async () => {
   // ... nonce request
 
-  const myRecurringIntent = { /* intent definition */ }
+  const myRecurringIntent = { /* intent declaration */ }
 
   const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     // ... request config
@@ -303,7 +303,7 @@ main()
 
 ## 5. Submitting the Intent
 
-Now that we have our intent signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/intents/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/intents/compile/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
+Now that we have our declaration signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/intents/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/intents/compile/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
 
 We also get to include the `signature` field from the previous step.
 
@@ -340,11 +340,11 @@ const main = async () => {
 main()
 ```
 
-Once the signed Brink Intent is submitted to the Brink API, it will be added to the Brink Intentpool and will be available for solvers to fulfill once the conditions are met.
+Once the signed Brink Declaration is submitted to the Brink API, it will be added to the Brink Intentpool and the intent we created will be available for solvers to fulfill once the conditions are met.
 
 ## Conclusion
 
-Congratulations! You've successfully created your first Brink Intent. Your final code file should look something like this:
+Congratulations! You've successfully created your first Brink Intent and submitted it as a Declaration. Your final code file should look something like this:
 
 ```typescript script.js
 const axios = require('axios')
