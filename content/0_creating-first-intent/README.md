@@ -394,7 +394,7 @@ const main = async () => {
     account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`),
   })
 
-  const signature = await walletClient.signTypedData({
+  const declarationSignature = await walletClient.signTypedData({
     account: walletClient.account,
     types: eip712Data.types,
     domain: eip712Data.domain,
@@ -411,7 +411,7 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       declaration: myRecurringIntent,
-      signature
+      signature: declarationSignature
     }
   })
 
