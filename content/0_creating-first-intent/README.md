@@ -147,7 +147,7 @@ Now that we've defined our intent using the Brink Intents DSL, we must compile i
 >
 > A `Segment` (actions, conditions, replay values) is the lowest level of granularity in the Brink protocol. `Segments` make up `Intents`, and `Intents` make up `Declarations`. This empowers developers to create truly composable and complex intents quickly and easily.
 
-In our *compile* request, we must define a few fields to properly prepare the intent. Since this is a GET request, we will pass our data as query parameters.
+In our *compile* request, we must define a few fields to properly compile the intent. Since this is a GET request, we will pass our data as query parameters.
 
 Params for the `/intents/compile/v1` request include:
 - `chainId`: The chain ID of the network you are using (we are using Ethereum Mainnet, `1`).
@@ -288,7 +288,7 @@ const main = async () => {
     account: privateKeyToAccount(`0x${process.env.PRIVATE_KEY}`),
   })
 
-  const signature = await walletClient.signTypedData({
+  const declarationSignature = await walletClient.signTypedData({
     account: walletClient.account,
     types: eip712Data.types,
     domain: eip712Data.domain,
@@ -316,9 +316,9 @@ const main = async () => {
 
   const myRecurringIntent = { /* intent declaration */ }
 
-  // ... prepareRes and walletClient from previous step
+  // ... compile request and walletClient from previous step
 
-  const signature = await walletClient.signTypedData({
+  const declarationSignature = await walletClient.signTypedData({
     // ... signTypedData config
   })
 
@@ -331,7 +331,7 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       declaration: myRecurringIntent,
-      signature
+      signature: declarationSignature
     }
   })
 }
