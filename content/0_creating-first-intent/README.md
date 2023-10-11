@@ -4,9 +4,7 @@ excerpt: "This guide will walk you through creating your first intent: a recurri
 slug: creating-your-first-intent
 ---
 
-The steps outlined in this tutorial can be done either within a new codebase or within an existing project.
-
-This guide uses [viem](https://www.npmjs.com/package/viem "viem package on npm") for wallet signatures and [axios](https://www.npmjs.com/package/axios "axios package on npm") for HTTP requests. You may replace these with other equivalent packages of your choice, such as `ethers.js`/`web3.js` or `fetch` respectively.
+This guide uses [viem](https://www.npmjs.com/package/viem "viem package on npm") for wallet signatures and [axios](https://www.npmjs.com/package/axios "axios package on npm") for HTTP requests. You may replace these with other equivalent packages of your choice, such as [ethers.js](https://www.npmjs.com/package/ethers "ethers package on npm") or [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API "the fetch api docs") respectively.
 
 We've also opted to use [dotenv](https://www.npmjs.com/package/dotenv "dotenv package on npm") to hide our secrets, as we will be using both an EOA private key and a Brink API key.
 
@@ -14,11 +12,15 @@ We've also opted to use [dotenv](https://www.npmjs.com/package/dotenv "dotenv pa
 >
 > Note: We at Brink DO NOT encourage storing private keys in .env files. This is for demonstration purposes only. Please use a more secure method of storing your private keys in production.
 
+The steps outlined in this tutorial can be done either within a new codebase or within an existing project.
+
+To view and play with the demo script that this guide is based on and more, please visit our [public guides repository on GitHub](https://github.com/brinktrade/guides/tree/main/content/0_creating-first-intent "creating your first intent guide code").
+
 ## Setup
 
 We'll start by installing our packages and setting up the JavaScript code file. In the file, we will create one `main()` function that runs our script end-to-end. We'll also load our secrets from our .env file.
 
-```bash
+```bash terminal
 $ npm install viem axios dotenv
 ```
 
@@ -34,7 +36,10 @@ const main = async () => {
 main()
 ```
 
-**Note**: This guide makes use of the Brink API which requires an API key. Please [contact us](https://discord.gg/NNx4Y7XB "brink discord") to get yours!
+> 📘 Brink API Key
+>
+> This guide makes use of the Brink API which requires an API key. Please [contact us on Discord](https://discord.gg/NNx4Y7XB "brink discord") to get yours!
+
 
 ## 1. Constructing the Intent
 
@@ -46,30 +51,30 @@ The first step in creating this intent is using Brink's domain-specific language
 
 Inside of our `main()` function, we will add our Brink DSL object, declaring our recurring swap intent with it's parameters and conditions.
 
-```diff script.js
+```typescript script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
 
 const main = async () => {
-+ const myRecurringIntent = {
-+   actions: [{
-+     type: 'marketSwap',
-+     tokenInAmount: 5000.0,
-+     tokenIn: 'USDC',
-+     tokenOut: 'ETH',
-+     fee: 2.5 // incentivize solver with 2.5% of the swap
-+   }],
-+   conditions: [{
-+     type: 'blockInterval',
-+     interval: 50_000, // ~7 days
-+     maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
-+   }],
-+   replay: {
-+     nonce: 123, // TODO, must make API request for this value
-+     runs: 'UNTIL_CANCELLED'
-+   }
-+ }
+  const myRecurringIntent = {
+    actions: [{
+      type: 'marketSwap',
+      tokenInAmount: 5000.0,
+      tokenIn: 'USDC',
+      tokenOut: 'ETH',
+      fee: 2.5 // incentivize solver with 2.5% of the swap
+    }],
+    conditions: [{
+      type: 'blockInterval',
+      interval: 50_000, // ~7 days
+      maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
+    }],
+    replay: {
+      nonce: 123, // TODO, must make API request for this value
+      runs: 'UNTIL_CANCELLED'
+    }
+  }
 }
 
 main()
@@ -93,7 +98,7 @@ This endpoint will respond with a few pieces of data, but we only need the `nonc
 
 We'll start by putting our Brink API key into our .env file for security, then loading it into our code as a request header in `axios` with an `x-api-key` field.
 
-```bash
+```bash .env
 # .env file
 BRINK_API_KEY=<my_api_key>
 ```
@@ -135,16 +140,16 @@ main()
 
 ## 2. Preparing the Intent
 
-Now that our intent is declared, we must sign it via an [EIP-721](https://eips.ethereum.org/EIPS/eip-712 "eip-712") signature. Before signing, we must first construct the signature payload for our intent. Thankfully, there is a Brink API endpoint that quickly provides this payload for us: `/strategies/data/v1`. 
+Now that our intent is declared, we must sign it via an [EIP-721](https://eips.ethereum.org/EIPS/eip-712 "eip-712") signature. Before signing, we must first construct the signature payload for our intent. Thankfully, there is a Brink API endpoint that quickly provides this payload for us: `/intents/compile/v1`. 
 
 In this request, we must define a few fields to properly prepare the intent. Since this is a GET request, we will pass our data as query parameters.
 
-Params for the `/strategies/data/v1` request include:
+Params for the `/intents/compile/v1` request include:
 - `chainId`: The chain ID of the network you are using (we are using Ethereum Mainnet, `1`).
 - `signer`: The address of the account that will be signing the intent.
 - `signatureType`: We'll be using the value `EIP712` for this guide.
 - `include`: An array of extra data to include in the API response. 
-- `strategy`: The intent object we created earlier.
+- `declaration`: The intent object we created earlier (also accepts an array of multiple intents).
 
 Using the `params` object in axios, we can define our parameters for this call as such:
 
@@ -158,7 +163,7 @@ const main = async () => {
 
   const myRecurringIntent = { /* intent definition */ }
 
-  const prepareRes = await axios.get('https://api.brink.trade/strategies/data/v1', {
+  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -167,7 +172,7 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       include: ['required_transactions'],
-      strategy: myRecurringIntent
+      declaration: myRecurringIntent
     }
   })
 }
@@ -175,14 +180,18 @@ const main = async () => {
 main()
 ```
 
+> 📘 What is a `Declaration`?
+>
+> A `Declaration` is a new concept introduced in the Brink protocol that allows for multiple `Intents` to be submitted in bulk with only one signature. Each time you sign an off-chain message (e.g. EIP-712 signature) on Brink, a `Declaration` is created, and may contain as many `Intents` as the user or developer would like.
+
 We must pass `required_transactions` as an item in the `include` array. By doing so, the Brink API will respond with any transactions that are required to be finalized *before* our intent can be fulfilled by solvers. In our case, a token approval transaction is required.
 
-Once submitted, the `/strategies/data/v1` response data will be structured as such:
+Once submitted, the `/intents/compile/v1` response data will be structured as such:
 
-```typescript
-// response from `/strategies/data/v1`
+```typescript compile response data
+// response from `/intents/compile/v1`
 {
-  strategy: { ... },
+  declaration: { ... },
   eip712Data: {
     types: { ... },
     domain: { ... },
@@ -213,7 +222,7 @@ Before signing and submitting our intent, we must *approve* the signer's Brink P
 
 We can get all info about the approval transaction in the `requiredTransactions` field of the API response above.
 
-```typescript
+```typescript compile response data
 {
   //... other response fields
   requiredTransactions: [
@@ -239,15 +248,15 @@ From the `owner` account, you should approve the `spender` address to spend the 
 
 ### Approving Tokens Programmatically
 
-If you'd like to run the approval transaction programmatically or within a web app, you may construct the transaction using either the `minTx` or the `maxTx` objects in the `requiredTransactions` response array. The `minTx` and `maxTx` contain the calldata for the approval transaction for both the minimum allowance amount and the maximum allowance amount respectively.
+If you'd like to run the approval transaction programmatically or within a web app, you may construct the transaction using either the `minTx` or the `maxTx` objects in the `requiredTransactions` response array. The `minTx` and `maxTx` contain the exact executable calldata for the approval transaction for both the minimum allowance amount and the maximum allowance amount respectively.
 
 ## 4. Signing the Intent
 
-Now that we've approved our Brink Proxy to spend our tokens, we can finally sign the intent. To do so, we must construct the EIP-712 typed data that we received from the `/strategies/data/v1` endpoint. These values can be found in the `eip712Data` field of the response. We also must set the `primaryType` field to `MetaDelegateCall`.
+Now that we've approved our Brink Proxy to spend our tokens, we can finally sign the intent. To do so, we must construct the EIP-712 typed data that we received from the `/intents/compile/v1` endpoint. These values can be found in the `eip712Data` field of the response. We also must set the `primaryType` field to `MetaDelegateCall`.
 
 We can prepare `viem` to sign by adding our private key to our .env file, then loading it into our code as a `walletClient`. Once our `walletClient` is created, we can construct and sign the EIP-712 signature using the `signTypedData()` method, passing in our values from the `eip712Data` field and our `walletClient.account` object.
 
-```bash
+```bash .env
 # .env file
 BRINK_API_KEY=<my_api_key>
 SIGNER_PRIVATE_KEY=<my_private_key>
@@ -267,7 +276,7 @@ const main = async () => {
 
   const myRecurringIntent = { /* intent definition */ }
 
-  const prepareRes = await axios.get('https://api.brink.trade/strategies/data/v1', {
+  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     // ... request config
   })
 
@@ -292,7 +301,7 @@ main()
 
 ## 5. Submitting the Intent
 
-Now that we have our intent signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/strategies/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/strategies/data/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
+Now that we have our intent signature using `viem`, we can finally submit it to the Brink API. To do so, we must make a POST request to the `/intents/submit/v1` endpoint. The data we pass to this endpoint is similar to the data we passed to the `/intents/compile/v1` endpoint, but it's passed as the POST request body, rather than query parameters.
 
 We also get to include the `signature` field from the previous step.
 
@@ -304,7 +313,7 @@ require('dotenv').config()
 const main = async () => {
   // ... nonce request
 
-  const myRecurringIntent = { /* intent definition */ }
+  const myRecurringIntent = { /* intent declaration */ }
 
   // ... prepareRes and walletClient from previous step
 
@@ -312,7 +321,7 @@ const main = async () => {
     // ... signTypedData config
   })
 
-  const submitRes = await axios.post('https://api.brink.trade/strategies/submit/v1', {
+  const submitRes = await axios.post('https://api.brink.trade/intents/submit/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -320,7 +329,7 @@ const main = async () => {
       chainId: 1,
       signer: '0xc0ffee',
       signatureType: 'EIP712',
-      strategy: myRecurringIntent,
+      declaration: myRecurringIntent,
       signature
     }
   })
@@ -366,7 +375,7 @@ const main = async () => {
     }
   }
 
-  const prepareRes = await axios.get('https://api.brink.trade/strategies/data/v1', {
+  const prepareRes = await axios.get('https://api.brink.trade/intents/compile/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -375,7 +384,7 @@ const main = async () => {
       signer: '0xc0ffee',
       signatureType: 'EIP712',
       include: ['required_transactions'],
-      strategy: myRecurringIntent
+      declaration: myRecurringIntent
     }
   })
 
@@ -394,7 +403,7 @@ const main = async () => {
     primaryType: 'MetaDelegateCall'
   })
 
-  const submitRes = await axios.post('https://api.brink.trade/strategies/submit/v1', {
+  const submitRes = await axios.post('https://api.brink.trade/intents/submit/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     },
@@ -402,7 +411,7 @@ const main = async () => {
       chainId: 1,
       signer: '0xc0ffee',
       signatureType: 'EIP712',
-      strategy: myRecurringIntent,
+      declaration: myRecurringIntent,
       signature
     }
   })

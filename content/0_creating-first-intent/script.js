@@ -1,3 +1,5 @@
+// ! NOTE: This script will be finalized in the next few days to use the updated Brink DSL (lines 103-124). Currently, this script is using the low-level intent definition syntax (lines 9-91). This script still works, but is not accurate with the guide yet :) - @jacobdcastro 2023-10-10
+
 const axios = require('axios')
 const viem = require('viem')
 const { mainnet } = require('viem/chains')
