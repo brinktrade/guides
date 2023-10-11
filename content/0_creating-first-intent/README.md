@@ -46,30 +46,30 @@ The first step in creating this intent is using Brink's domain-specific language
 
 Inside of our `main()` function, we will add our Brink DSL object, declaring our recurring swap intent with it's parameters and conditions.
 
-```typescript script.js
+```diff script.js
 const axios = require('axios')
 const viem = require('viem')
 require('dotenv').config()
 
 const main = async () => {
-  const myRecurringIntent = {
-    actions: [{
-      type: 'marketSwap',
-      tokenInAmount: 5000.0,
-      tokenIn: 'USDC',
-      tokenOut: 'ETH',
-      fee: 2.5 // incentivize solver with 2.5% of the swap
-    }],
-    conditions: [{
-      type: 'blockInterval',
-      interval: 50_000, // ~7 days
-      maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
-    }],
-    replay: {
-      nonce: 123, // TODO, must make API request for this value
-      runs: 'UNTIL_CANCELLED'
-    }
-  }
++ const myRecurringIntent = {
++   actions: [{
++     type: 'marketSwap',
++     tokenInAmount: 5000.0,
++     tokenIn: 'USDC',
++     tokenOut: 'ETH',
++     fee: 2.5 // incentivize solver with 2.5% of the swap
++   }],
++   conditions: [{
++     type: 'blockInterval',
++     interval: 50_000, // ~7 days
++     maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
++   }],
++   replay: {
++     nonce: 123, // TODO, must make API request for this value
++     runs: 'UNTIL_CANCELLED'
++   }
++ }
 }
 
 main()
