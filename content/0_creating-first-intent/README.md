@@ -67,11 +67,11 @@ const main = async () => {
     }],
     conditions: [{
       type: 'blockInterval',
-      interval: 50_000, // ~7 days
+      interval: 50_000, // ~50,000 blocks are built every 7 days
       maxIntervals: 12 // 7 days * 12 === 12 weeks or 3 months
     }],
     replay: {
-      nonce: 123, // TODO, must make API request for this value
+      nonce: 123, // TODO, must make API request for this value, shown below
       runs: 'UNTIL_CANCELLED'
     }
   }
@@ -92,14 +92,13 @@ We must also specify the `replay.nonce` value, which requires a quick request to
 
 ### Fetching the Nonce Value
 
-To fetch the correct `nonce` value, we must make a GET request to the `/signers/<SIGNER>/nextAvailableBit/v1` endpoint (replacing `<SIGNER>` with the EOA account we'll be using to sign and submit this intent).
+To fetch the correct `nonce` value, we must make a GET request to the `/signers/<SIGNER>/nonces/v1` endpoint (replacing `<SIGNER>` with the public address of the EOA we'll be using to sign and submit this intent).
 
 This endpoint will respond with a few pieces of data, but we only need the `nonce` value. Once we have the response data, we can plug it in to our intent object.
 
 We'll start by putting our Brink API key into our .env file for security, then loading it into our code as a request header in `axios` with an `x-api-key` field.
 
 ```bash .env
-# .env file
 BRINK_API_KEY=<my_api_key>
 ```
 
@@ -109,7 +108,7 @@ const viem = require('viem')
 require('dotenv').config()
 
 const main = async () => {
-  const nonceRes = await axios.get('https://api.brink.trade/signers/0xc0ffee/v1', {
+  const nonceRes = await axios.get('https://api.brink.trade/signers/0xc0ffee/nonces/v1', {
     headers: {
       'x-api-key': process.env.BRINK_API_KEY,
     }
@@ -138,11 +137,17 @@ const main = async () => {
 main()
 ```
 
-## 2. Preparing the Intent
+## 2. Compiling the Intents DSL
 
-Now that our intent is declared, we must sign it via an [EIP-721](https://eips.ethereum.org/EIPS/eip-712 "eip-712") signature. Before signing, we must first construct the signature payload for our intent. Thankfully, there is a Brink API endpoint that quickly provides this payload for us: `/intents/compile/v1`. 
+Now that we've defined our intent using the Brink Intents DSL, we must compile it into a Brink Declaration and construct the [EIP-712](https://eips.ethereum.org/EIPS/eip-712 "eip 712 proposal") signature payload before signing it. Thankfully, there is a single Brink API endpoint that quickly compiles the DSL **and** provides the signature payload for us: `/intents/compile/v1`. 
 
-In this request, we must define a few fields to properly prepare the intent. Since this is a GET request, we will pass our data as query parameters.
+> 📘 What is a `Declaration`?
+>
+> A `Declaration` is a new concept introduced in the Brink protocol that allows for multiple `Intents` to be submitted in bulk with only one signature. Each time you sign an off-chain message (e.g. EIP-712 signature) on Brink, a `Declaration` is created, and may contain as many `Intents` as the user or developer would like.
+>
+> A `Segment` (actions, conditions, replay values) is the lowest level of granularity in the Brink protocol. `Segments` make up `Intents`, and `Intents` make up `Declarations`. This empowers developers to create truly composable and complex intents quickly and easily.
+
+In our *compile* request, we must define a few fields to properly prepare the intent. Since this is a GET request, we will pass our data as query parameters.
 
 Params for the `/intents/compile/v1` request include:
 - `chainId`: The chain ID of the network you are using (we are using Ethereum Mainnet, `1`).
@@ -179,12 +184,6 @@ const main = async () => {
 
 main()
 ```
-
-> 📘 What is a `Declaration`?
->
-> A `Declaration` is a new concept introduced in the Brink protocol that allows for multiple `Intents` to be submitted in bulk with only one signature. Each time you sign an off-chain message (e.g. EIP-712 signature) on Brink, a `Declaration` is created, and may contain as many `Intents` as the user or developer would like.
->
-> A `Segment` (actions, conditions, replay values) is the lowest level of granularity in the Brink protocol. `Segments` make up `Intents`, and `Intents` make up `Declarations`. This empowers developers to create truly composable and complex intents quickly and easily.
 
 We must pass `required_transactions` as an item in the `include` array. By doing so, the Brink API will respond with any transactions that are required to be finalized *before* our intent can be fulfilled by solvers. In our case, a token approval transaction is required.
 
