@@ -2,6 +2,7 @@
 title: Creating Your First Intent
 excerpt: "This guide will walk you through creating your first intent: a recurring swap intent."
 slug: creating-your-first-intent
+category: 650b5e9302f93f0024bedac8
 ---
 
 This guide uses [viem](https://www.npmjs.com/package/viem "viem package on npm") for wallet signatures and [axios](https://www.npmjs.com/package/axios "axios package on npm") for HTTP requests. You may replace these with other equivalent packages of your choice, such as [ethers.js](https://www.npmjs.com/package/ethers "ethers package on npm") or [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API "the fetch api docs") respectively.
