@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run-0": "node ./content/0_creating-first-intent/script.js"
+    "guide-0": "node ./content/0_creating-your-first-intent/script.js"
   },
   "repository": {
     "type": "git",
