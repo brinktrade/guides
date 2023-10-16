@@ -62,7 +62,7 @@ const main = async () => {
     actions: [{
       type: 'marketSwap',
       owner: '0xc0ffee', // EOA public address of signer
-      tokenInAmount: 5000.0,
+      tokenInAmount: 500000000, // 500 USDC (6 decimals)
       tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
       tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
       fee: 2.5 // incentivize solver with 2.5% of the swap
@@ -85,7 +85,7 @@ main()
 
 The `myRecurringIntent` intent object is made up of 3 fields: `actions`, `conditions`, and `replay`.
 
-The `actions` field is an array of objects that define the outcome(s) of our intent, in our case, a 5000 USDC -> WETH market swap. We also set a 2.5% fee that the solver may take as an incentive to fulfill our intent.
+The `actions` field is an array of objects that define the outcome(s) of our intent, in our case, a 500 USDC -> WETH market swap. We also set a 2.5% fee that the solver may take as an incentive to fulfill our intent.
 
 Similarly, the `conditions` field is an array of objects that define the conditions that the actions may be executed against. Here, we expect the actions to run at a block interval of 50,000 blocks for 12 intervals to meet our "once a week for 3 months" intent condition.
 
@@ -118,7 +118,7 @@ const main = async () => {
   const myRecurringIntent = {
     actions: [{
       type: 'marketSwap',
-      tokenInAmount: 5000.0,
+      tokenInAmount: 500000000,
       tokenIn: 'USDC',
       tokenOut: 'ETH',
       fee: 2.5 
@@ -207,7 +207,7 @@ Once submitted, the `/intents/compile/v1` response data will be structured as su
       owner: '<YOUR_PUBLIC_ADDRESS>',
       spender: '<BRINK_PROXY_ADDRESS>',
       currentAllowance: '0',
-      requiredAllowance: '5000000000',
+      requiredAllowance: '500000000',
       token: { ... },
       minTx: { ... },
       maxTx: { ... }
@@ -232,7 +232,7 @@ We can get all info about the approval transaction in the `requiredTransactions`
       owner: '<YOUR_PUBLIC_ADDRESS>',
       spender: '<BRINK_PROXY_ADDRESS>',
       currentAllowance: '0',
-      requiredAllowance: '5000000000',
+      requiredAllowance: '500000000',
       token: {
         address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC token address
         // ... other info
@@ -373,7 +373,7 @@ const main = async () => {
     actions: [{
       type: 'marketSwap',
       owner: '0xc0ffee', // EOA public address of signer
-      tokenInAmount: 5000.0,
+      tokenInAmount: 500000000,
       tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
       tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
       fee: 2.5 // incentivize solver with 2.5% of the swap

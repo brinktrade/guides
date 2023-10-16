@@ -23,7 +23,7 @@ const main = async () => {
       {
         type: 'marketSwap',
         owner: signerPublicAddress, // EOA public address of signer
-        tokenInAmount: 5000.0,
+        tokenInAmount: 500000000, // 500 USDC (6 decimals)
         tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
         tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
         fee: 2.5 // incentivize solver with 2.5% of the swap
