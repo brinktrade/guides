@@ -15,7 +15,7 @@ We've also opted to use [dotenv](https://www.npmjs.com/package/dotenv "dotenv pa
 
 The steps outlined in this tutorial can be done either within a new codebase or within an existing project.
 
-To view and play with the demo script that this guide is based on and more, please visit our [public guides repository on GitHub](https://github.com/brinktrade/guides/tree/main/content/0_creating-first-intent "creating your first intent guide code").
+To view and play with the demo script that this guide is based on and more, please visit our [public guides repository on GitHub](https://github.com/brinktrade/guides/blob/c00770d9027bb6b330303b0018e40e4f40748f63/content/guides/0_creating-your-first-intent/script.js "creating your first intent guide code").
 
 ## Setup
 
@@ -355,7 +355,7 @@ Once the signed Brink Declaration is submitted to the Brink API, it will be adde
 
 Congratulations! You've successfully created your first Brink Intent and submitted it as a Declaration. Your final code file should look something like the code block below.
 
-For a full, runable script, please visit [`script.js` file in our public guides GitHub repo](https://github.com/brinktrade/guides/blob/main/content/0_creating-first-intent/script.js "script.js in public repo").
+For a full, runable script, please visit [`script.js` file in our public guides GitHub repo](https://github.com/brinktrade/guides/blob/c00770d9027bb6b330303b0018e40e4f40748f63/content/guides/0_creating-your-first-intent/script.js "script.js in public repo").
 
 ```typescript script.js
 const axios = require('axios')
