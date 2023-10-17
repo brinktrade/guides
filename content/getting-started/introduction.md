@@ -1,5 +1,6 @@
 ---
 title: Introduction to Brink
+excerpt: 
 slug: introduction
 category: 6397ac3510831702c7437f5d
 ---
