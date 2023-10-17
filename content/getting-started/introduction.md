@@ -1,6 +1,5 @@
 ---
 title: Introduction to Brink
-excerpt: "I briefing on the usage of Brink Intents"
 slug: introduction
 category: 6397ac3510831702c7437f5d
 ---
