@@ -11,6 +11,10 @@ Brink Intents lets you build [powerful intent-based features](https://www.brink.
 
 We recommend reading our introduction post, [Introducing Brink Intents](https://www.brink.trade/blog/introducing-brink-intents), for an overview of Brink Intents.
 
+> 🚧 Disclaimer
+>
+> The Brink engineering team is still working hard on the products explained in these docs. Therefore, you may come across some inconsistencies or stale/missing information. We are working hard to make the Brink Intents Protocol fully feature-complete, and refining the documentation is part of that process. If you have any questions, please reach out to us on [Discord](https://discord.gg/8Mjrq77xyd).
+
 # What can I build with Brink Intents?
 
 You can build any intent-based workflow, from basic swap functionality to complex workflows that execute continuously based on state conditions. Here are just a few examples:

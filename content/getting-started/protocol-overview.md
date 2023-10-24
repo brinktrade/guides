@@ -4,6 +4,9 @@ excerpt: "A high-level overview of the Brink Intents protocol architecture."
 slug: protocol-overview
 category: 6397ac3510831702c7437f5d
 ---
+> 🚧 Disclaimer
+>
+> The Brink engineering team is still working hard on the products explained in these docs. Therefore, you may come across some inconsistencies or stale/missing information. We are working hard to make the Brink Intents Protocol fully feature-complete, and refining the documentation is part of that process. If you have any questions, please reach out to us on [Discord](https://discord.gg/8Mjrq77xyd).
 
 Brink Intents protocol is designed to allow users to delegate execution of complex intents to solvers in the most secure and efficient way possible.
 
