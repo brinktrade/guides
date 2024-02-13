@@ -28,6 +28,8 @@ Creates a one-time or recurring dutch auction swap. The auction will start at a 
 
 ## Example
 
+Intent to swap 150 MATIC for DAI (at market price) once per hour for 8 hours.
+
 ```json
 {
   "type": "blockIntervalDutchAuctionSwap", // MUST be `blockIntervalDutchAuctionSwap`
@@ -38,14 +40,16 @@ Creates a one-time or recurring dutch auction swap. The auction will start at a 
   "tokenInAmount": "150000000000000000000", // 150 MATIC
 
   // hourly swap, 3 times
+  // swap is expected to execute about halfway into the auction duration (based on start/end percent values)
+  // 45 min auction interval + (30 min / 2) expected execution time = 60 min recurring swap
+  "auctionInterval": 1200, // ~45 mins (block count on polygon network)
+  "auctionDuration": 800, // ~30 mins (block count on polygon network)
   "firstAuctionStartBlock": 53584190, // polygon block number
-  "auctionInterval": 1600, // ~45 mins
-  "auctionDuration": 800, // ~15 mins
-  "maxAuctions": 3,
+  "maxAuctions": 8,
   
   // auction price starts at 1.8% above current market price
-  // auction price ends at 2.3% below current market price
   "startPercent": 1.8,
+  // auction price ends at 2.3% below current market price
   "endPercent": -2.3,
 
   "twapInterval": 120, // TWAP over 2 minutes
