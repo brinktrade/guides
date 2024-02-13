@@ -4,7 +4,7 @@ excerpt: "Execute a one-time or recurring swap using a Dutch auction mechanism."
 slug: blockintervaldutchauctionswap
 category: 650cebad6a0b75002cfb4757 # DSL category
 parentDoc: 650cecc273f124002190f897 # actions parent doc
-hidden: true
+hidden: false
 ---
 
 Creates a one-time or recurring dutch auction swap. The auction will start at a price above the current market price and end at a price below the current market price, and will re-occur at a set interval until the maximum number of auctions is reached or the swap is cancelled.
