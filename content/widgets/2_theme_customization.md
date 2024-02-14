@@ -10,7 +10,7 @@ To personalize the design of the widget, simply head over to the [Brink Widget S
 
 ## Theme customization example
 
-The **theme** prop attribute enables customisation of the widget theme's *mode, colors, shape and slot* properties.
+The **theme** prop attribute enables customization of the widget theme's *mode, colors, shape, and slot* properties.
 
 ```typescript theme.ts
   import { RecurringSwapWidget } from '@brinkninja/widgets'
@@ -164,7 +164,7 @@ Here is the list of available CSS selectors:
   - .brink-list-item
   - .brink-pagination
 
-Css customization example:
+CSS customization example:
 
 ```scss theme.scss
 $white: #FFFFFF;
