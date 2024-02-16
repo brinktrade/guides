@@ -1,23 +1,23 @@
 ---
-title: Provider customiaztion
+title: Provider customization
 excerpt: "Customizing @brinkninja/widgets providers which are used under the hood"
 slug: widgets/provider-customization
 category: 65ca4e8f54dda9007a445556
 ---
 
 Widgets are designed to utilize different providers behind the scenes. 
-Each of those providers can be disabled, and replaced with your own custom providers.
+Each of those providers can be disabled and replaced with your custom providers.
 
-List of providers which are currenlty used by widget:
+List of providers that are currently used by the widget:
 
-    - [Wagmi provider](https://wagmi.sh/)
-    - [Rainbowkit provider](https://www.rainbowkit.com/docs/installation)
-    - [QueryClient provider](https://tanstack.com/query/v4/docs/framework/react/reference/QueryClientProvider)
-    - [Material provider](https://mui.com/material-ui/customization/theming/)
+- [Wagmi provider](https://wagmi.sh/)
+- [Rainbowkit provider](https://www.rainbowkit.com/docs/installation)
+- [QueryClient provider](https://tanstack.com/query/v4/docs/framework/react/reference/QueryClientProvider)
+- [Material provider](https://mui.com/material-ui/customization/theming/)
 
 ## Example: Overriding Wagmi Provider
 
-For Wagmi configuration docs refer to official [Wagmi site](https://wagmi.sh/react/getting-started).
+For Wagmi configuration docs refer to the official [Wagmi site](https://wagmi.sh/react/getting-started).
 
 ```typescript wagmi.ts
 
@@ -65,7 +65,7 @@ const wagmiConfig = createConfig({
   connectors
 })
 
-// Add custom provider to your App
+// Add a custom provider to your App
 
 ReactDOM.render(
   <WagmiProvider config={wagmiConfig}>
@@ -77,7 +77,7 @@ ReactDOM.render(
 ```
 
 ## Example: Overriding Rainbowkit Provider
-For Rainbowkit configuration docs refer to official [Rainbowkit site](https://www.rainbowkit.com/docs/installation).
+For Rainbowkit configuration docs refer the official [Rainbowkit site](https://www.rainbowkit.com/docs/installation).
 
 ```typescript rainbowkit.ts
 
@@ -85,7 +85,7 @@ For Rainbowkit configuration docs refer to official [Rainbowkit site](https://ww
 
 <RecurringSwapWidget disableRainbowkitProvider />
 
-// Add custom provider to your App
+// Add a custom provider to your App
 import { configureChains } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 
@@ -119,7 +119,7 @@ ReactDOM.render(
 ```
 
 ## Example: QueryClient provider
-For QueryClient configuration docs refer to official [ReactQuery site](https://tanstack.com/query/v4/docs/framework/react/reference/QueryClientProvider).
+For QueryClient configuration docs refer the official [ReactQuery site](https://tanstack.com/query/v4/docs/framework/react/reference/QueryClientProvider).
 
 ```typescript queryClient.ts
 
@@ -127,7 +127,7 @@ For QueryClient configuration docs refer to official [ReactQuery site](https://t
 
 <RecurringSwapWidget disableQueryClientProvider />
 
-// Add custom provider to your App
+// Add a custom provider to your App
 
 import { QueryClient, QueryClientProvider } from '@react-query/query-client';
 
@@ -162,7 +162,7 @@ While it is possible to disable the theme provider, it is not recommended to do 
 
 <RecurringSwapWidget disableMuiProvider />
 
-// Add custom provider to your App
+// Add a custom provider to your App
 import { Theme } from '@brinkninja/components'
 
 ReactDOM.render(
