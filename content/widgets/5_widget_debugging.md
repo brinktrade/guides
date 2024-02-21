@@ -25,9 +25,9 @@ https://example.com/page?brinkwidget=debug
 Debug mode currently shows additional values and information in these views:
     - "My Swaps" view
 
-    ### My Swaps
-    Enabling debug mode shows an additional dots button where you can see the intent hash.
+### My Swaps
+Enabling debug mode shows an additional dots button where you can see the intent hash.
 
-    ![myswapsdebugg](https://raw.githubusercontent.com/brinktrade/guides/main/assets/myswapsdebugg.png)
+![myswapsdebugg](https://raw.githubusercontent.com/brinktrade/guides/main/assets/myswapsdebugg.png)
 
 
