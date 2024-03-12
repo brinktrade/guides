@@ -1,8 +1,8 @@
 ---
-title: API Getting Started
+title: Getting Started
 excerpt: "This guide will walk you through Brink API."
 slug: api-getting-started
-category: 63a483737e2c71001003a3ec
+category: 640d40f77d896f000b303dd4
 ---
 # Quick start
 
