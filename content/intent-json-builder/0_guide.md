@@ -43,7 +43,18 @@ If you encounter any errors while compiling your intent, you will be notified in
 >
 > If you stumble upon any errors while compiling your intent that you are not able to resolve, [contact us on Discord](https://discord.gg/NNx4Y7XB "brink discord").
 
-### Compiling DSL Sign & Submit
+### Approve Step
+After successfully compiling the DSL intent, if you don't have enough tokens approved for usage, you will encounter the approval step. Here, you can approve the required amount of tokens.
+
+![intentjsonbuilder_approve](https://raw.githubusercontent.com/brinktrade/guides/main/assets/intentjsonbuilder_approve.png)
+
+### Deposit Step
+After successfully compiling the DSL intent, if the token in use is a native token. You will need to wrap this native token into its wrapped counterpart. 
+
+![intentjsonbuilder_deposit](https://raw.githubusercontent.com/brinktrade/guides/main/assets/intentjsonbuilder_deposit.png)
+
+
+### Sign & Submit
 After successfully compiling the DSL intent, you are ready to sign it in your wallet. After signing, you can submit it to the network.
 
 ![intentjsonbuilder_sign_submit](https://raw.githubusercontent.com/brinktrade/guides/main/assets/intentjsonbuilder_sign_submit.png)
